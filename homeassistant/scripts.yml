@@ -1,0 +1,79 @@
+talktorhasspy:
+  alias: talktorhasspy
+  sequence:
+  - service: mqtt.publish
+    data_template:
+      topic: hermes/tts/say
+      payload: '{"siteId": "{{siteId}}","text": " {{text}} "}'
+  mode: single
+  icon: mdi:account-voice
+playrandom:
+  alias: playrandom
+  sequence:
+  - service: kodi.call_method
+    data:
+      method: Addons.ExecuteAddon
+      addonid: script.playrandomvideos
+      params:
+      - videodb://{{media}}
+    target:
+      entity_id: '{{player}}'
+  mode: single
+  icon: mdi:movie
+playsouthpark:
+  alias: playsouthpark
+  sequence:
+  - service: kodi.call_method
+    target:
+      entity_id:
+      - '{{ player }}'
+    data:
+      method: Player.Open
+      item:
+        file: plugin://plugin.video.southpark_unofficial?mode=sp:random
+  mode: single
+playmoviekodi:
+  alias: playmoviekodi
+  sequence:
+  - service: kodi.call_method
+    data:
+      method: Player.Open
+      item:
+        movieid: '{{ name }}'
+    target:
+      entity_id: '{{ player }}'
+  mode: single
+playepisodekodi:
+  alias: playepisodekodi
+  sequence:
+  - service: kodi.call_method
+    data:
+      method: Player.Open
+      item:
+        episodeid: '{{ name }}'
+    target:
+      entity_id: '{{ player }}'
+  mode: single
+playshowkodi:
+  alias: playshowkodi
+  sequence:
+  - service: kodi.call_method
+    data:
+      method: Player.Open
+      item:
+        tvshowid: '{{ name }}'
+    target:
+      entity_id: '{{ player }}'
+  mode: single
+playseasonkodi:
+  alias: playseasonkodi
+  sequence:
+  - service: kodi.call_method
+    data:
+      method: Player.Open
+      item:
+        seasonid: '{{ name }}'
+    target:
+      entity_id: '{{ player }}'
+  mode: single
+

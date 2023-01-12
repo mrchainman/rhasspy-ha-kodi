@@ -1,0 +1,14 @@
+#!/usr/bin/python3
+import requests
+import json
+import re
+url = "http://osmc:osmc@192.168.1.129:80/jsonrpc"
+headers = {'content-type': 'application/json'}
+pl_season = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetSeasons"}'
+r_seasons = requests.post(url, data=pl_season, headers=headers)
+d_seasons = r_seasons.json()
+for season in d_seasons['result']['seasons']:
+	season_name = season['label']
+	sid = season['seasonid']
+	season_name = re.sub('[^a-zA-Z0-9\s]', '', season_name)
+	print(f"{season_name}:{sid}") 

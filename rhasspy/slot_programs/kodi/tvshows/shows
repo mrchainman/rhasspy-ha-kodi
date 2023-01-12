@@ -1,0 +1,15 @@
+#!/usr/bin/python3
+import requests
+import json
+import re
+url = "http://osmc:osmc@192.168.1.129:80/jsonrpc"
+headers = {'content-type': 'application/json'}
+pl_shows = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetTVShows"}'
+r_shows = requests.post(url, data=pl_shows, headers=headers)
+d_shows = r_shows.json()
+for show in d_shows['result']['tvshows']:
+    show_name = show['label']
+    tid = show['tvshowid']
+    show_name = re.sub('[^a-zA-Z0-9\s]', '', show_name)
+    print(f"{show_name}:{tid}") 
+

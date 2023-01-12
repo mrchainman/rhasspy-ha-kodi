@@ -1,0 +1,14 @@
+#!/usr/bin/python3
+import requests
+import json
+import re
+url = "http://osmc:osmc@192.168.1.129:80/jsonrpc"
+headers = {'content-type': 'application/json'}
+payload = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetMovies"}'
+r = requests.post(url, data=payload, headers=headers)
+data = r.json()
+for entry in data['result']['movies']:
+    name = entry['label']
+    mid = entry['movieid']
+    name = re.sub('[^a-zA-Z0-9\s]', '', name)
+    print(f"{name}:{mid}") 

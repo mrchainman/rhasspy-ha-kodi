@@ -1,0 +1,14 @@
+#!/usr/bin/python3
+import requests
+import json
+import re
+url = "http://osmc:osmc@192.168.1.129:80/jsonrpc"
+headers = {'content-type': 'application/json'}
+pl_episode = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.GetEpisodes"}'
+r_episodes = requests.post(url, data=pl_episode, headers=headers)
+d_episodes = r_episodes.json()
+for episode in d_episodes['result']['episodes']:
+    episode_name = episode['label']
+    eid = episode['episodeid']
+    episode_name = re.sub('[^a-zA-Z0-9\s]', '', episode_name)
+    print(f"{episode_name}:{eid}") 

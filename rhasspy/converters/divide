@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+import sys
+import json
+
+value = json.load(sys.stdin)
+#print(int(value))
+print(float(float(value)/float(100)))

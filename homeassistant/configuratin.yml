@@ -1,0 +1,166 @@
+intent_script:
+  GetTime:
+    speech:
+      text: It is {{ as_timestamp (now()) | timestamp_custom('%H') }} {{ as_timestamp (now()) | timestamp_custom('%M') | regex_replace('^0+', '') }}
+  HassPlaylistMass:
+    speech:
+      text: Playing {{ playlist }} playlist
+    action:
+      service: mass.queue_command
+      data:
+        command: play_media
+        uri: "{{ playlist }}"
+        enqueue_mode: play
+        radio_mode: false
+      target:
+        entity_id: "{{ name }}"
+  HassArtistMass:
+    speech:
+      text: Playing {{ artist }}
+    action:
+      service: mass.queue_command
+      data:
+        command: play_media
+        uri: "{{ artist }}"
+        enqueue_mode: play
+        radio_mode: false
+      target:
+        entity_id: "{{ name }}"
+  HassPlayKodi:
+    speech:
+      text: >-
+        {% set fplayer = player + ".attributes.friendly_name" %}
+        Started playing in {{ media }} {{ states(fplayer)}}
+    action:
+      service_template: > 
+        script.{{'playsouthpark' if media == 'southpark'  else 'playrandom'}}
+      data:
+        player: "{{ player }}"
+        media: "{{ media }}"
+  HassPlayMovie:
+    speech:
+      text: >-
+        {% set fplayer = player + ".attributes.friendly_name" %}
+        Started playing the movie in {{ states(fplayer)}}
+    action:
+      service: script.playmoviekodi
+      data:
+        name: "{{ name }}"
+        player: "{{ player }}"
+  HassPlayShow:
+    speech:
+      text: >-
+        {% set fplayer = player + ".attributes.friendly_name" %}
+        Started playing the show in {{ states(fplayer)}}
+    action:
+      service: script.playshowkodi
+      data:
+        name: "{{ name }}"
+        player: "{{ player }}"
+  HassPlaySeason:
+    speech:
+      text: >-
+        {% set fplayer = player + ".attributes.friendly_name" %}
+        Started playing the season in {{ states(fplayer)}}
+    action:
+      service: script.playseasonkodi
+      data:
+        name: "{{ name }}"
+        player: "{{ player }}"
+  HassPlayEpisode:
+    speech:
+      text: >-
+        {% set fplayer = player + ".attributes.friendly_name" %}
+        Started playing the movie in {{ states(fplayer)}}
+    action:
+      service: script.playmoviekodi
+      data:
+        name: "{{ name }}"
+        player: "{{ player }}"
+  HassToggleMusic:
+    speech:
+      text: Stopped Media
+    action:
+      service: media_player.media_play_pause
+      target:
+        entity_id: "{{ name }}"
+  HassClearQueue:
+    speech:
+      text: Cleared queue
+    action:
+      service: mass.queue_command
+      data:
+        command: clear
+      target:
+        entity_id: "{{ name }}"
+  HassVol:
+    speech:
+      text: Set volume to {{ volume }}
+    action:
+      service: media_player.volume_set
+      target:
+        entity_id: "{{ name }}"
+      data:
+        volume_level: "{{ volume }}"
+  HassScene:
+    speech:
+      text: Activating {{ name }}
+    action:
+      service: scene.turn_on
+      target:
+        entity_id: scene.{{ name }}
+  HassNextTrack:
+    action:
+      service: media_player.media_next_track
+      target:
+        entity_id: "{{ name }}"
+  HassScript:
+    speech:
+      text: running {{ name }}
+    action:
+      service: script.turn_on
+      target:
+        entity_id: script.{{ name }}
+  HassGoodNight:
+    action:
+      service: script.turn_on
+      target:
+        entity_id: script.sleep
+  HassTimer:
+    speech:
+      text: Set timer to {{ minutes }} minutes
+    action:
+      service: timer.start
+      target:
+        entity_id: timer.general
+      data:
+        duration:
+          00:{{ minutes }}:00
+  HassCancelTimer:
+    speech:
+      text: Canceled Timer
+    action:
+      service: timer.cancel
+      target:
+        entity_id: timer.general
+  HassTimerLeft:
+    speech:
+      text: Timer has {{(as_timestamp(states.timer.general.attributes.finishes_at) | int) - (now().timestamp() | int)}} left
+  HassNextAlarm:
+    speech:
+      text: You have {{((((states.sensor.gt_p5210_next_alarm.attributes["Time in Milliseconds"]) - (now().timestamp() | int) )/ 1000 ) | round(0) ) | timestamp_custom("%H:%M")}} left
+  HassWeather:
+    speech:
+      text: >-
+        {% for state in states.weather -%}
+        {%- if loop.first %}The {% elif loop.last %} and the {% else %}, the {% endif -%}
+        weather is {{state.state_with_unit}}
+        {%- endfor %}.
+        We have a temperature of {{states.weather.home.attributes.temperature | replace('.',' point ')}} degrees
+        and the windspeed is {{states.weather.home.attributes.wind_speed | replace('.',' point ') }} .
+  HassWeatherForecast:
+    speech:
+      text: >-
+        Tomorrow the weather is {{states.weather.home.attributes.forecast.0.condition}}.
+        We will have a temperature of {{states.weather.home.attributes.forecast.0.temperature | replace('.',' point ')}} degrees
+        and the Windspeed will be {{states.weather.home.attributes.forecast.0.wind_speed | replace('.',' point ') }} .
