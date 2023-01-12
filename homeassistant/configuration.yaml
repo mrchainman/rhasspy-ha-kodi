@@ -73,7 +73,7 @@ intent_script:
         {% set fplayer = player + ".attributes.friendly_name" %}
         Started playing the movie in {{ states(fplayer)}}
     action:
-      service: script.playmoviekodi
+      service: script.playepisodekodi
       data:
         name: "{{ name }}"
         player: "{{ player }}"
