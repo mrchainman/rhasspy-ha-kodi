@@ -1,0 +1,15 @@
+- id: '1672681739755'
+  alias: Timer
+  description: ''
+  trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.general
+  condition: []
+  action:
+  - service: script.talktorhasspy
+    data:
+      siteId: mobile-app13
+      text: Time is up!
+  mode: single
