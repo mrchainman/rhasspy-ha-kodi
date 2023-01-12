@@ -11,5 +11,5 @@ for episode in d_episodes['result']['episodes']:
     episode_name = episode['label']
     eid = episode['episodeid']
     episode_name = re.sub('[^a-zA-Z0-9\s]', '', episode_name)
-    episode_name = re.sub('[0-9]x[0-9][0-9]', '', episode_name)
+    episode_name = re.sub('[0-9].?x[0-9].?[\s]', '', episode_name)
     print(f"{episode_name}:{eid}") 
