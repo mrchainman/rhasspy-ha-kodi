@@ -48,4 +48,14 @@ Kodi:
 
 	- local movies and shows
 
-	- If you have multiple kodi instances, I strongly recommend to setup a shared database and store your files on a NAS, since the scripts have no errorhandling
+If you have multiple kodi instances, I strongly recommend to setup a shared database and store your files on a NAS, since the scripts have no errorhandling
+
+Rhasspy:
+
+You might need to install some python libraries, used are:
+
+	- re
+
+	- json
+
+	- requests
